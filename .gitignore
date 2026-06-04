@@ -8,6 +8,8 @@ venv/
 models/*.pkl
 data/raw/
 data/cleaned/
+data/hf_cache/
+data/hf_extracted/
 *.log
 .streamlit/
 .ipynb_checkpoints/

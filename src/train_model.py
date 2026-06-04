@@ -274,28 +274,39 @@ def main() -> None:
 
     print("[DarkSec] Training candidate models...")
     for model_name, estimator in estimators.items():
-        print(f"[DarkSec] -> Binary model: {model_name}")
-        binary_pipeline, binary_metrics = train_pipeline(
-            X_train_b, y_train_b, X_test_b, y_test_b, model_name, estimator, "binary"
+        try:
+            print(f"[DarkSec] -> Binary model: {model_name}")
+            binary_pipeline, binary_metrics = train_pipeline(
+                X_train_b, y_train_b, X_test_b, y_test_b, model_name, estimator, "binary"
+            )
+            model_metrics["binary"][model_name] = binary_metrics
+
+            if best_binary_metrics is None or binary_metrics["f1_score"] > best_binary_metrics["f1_score"]:
+                best_binary_pipeline = binary_pipeline
+                best_binary_metrics = binary_metrics
+        except Exception as exc:
+            print(f"[DarkSec] Skipped binary model '{model_name}' due to error: {exc}")
+
+        try:
+            print(f"[DarkSec] -> Multi-class model: {model_name}")
+            multiclass_pipeline, multiclass_metrics = train_pipeline(
+                X_train_m, y_train_m, X_test_m, y_test_m, model_name, estimator, "multiclass"
+            )
+            model_metrics["multiclass"][model_name] = multiclass_metrics
+
+            if (
+                best_multiclass_metrics is None
+                or multiclass_metrics["f1_score"] > best_multiclass_metrics["f1_score"]
+            ):
+                best_multiclass_pipeline = multiclass_pipeline
+                best_multiclass_metrics = multiclass_metrics
+        except Exception as exc:
+            print(f"[DarkSec] Skipped multi-class model '{model_name}' due to error: {exc}")
+
+    if best_binary_pipeline is None or best_multiclass_pipeline is None:
+        raise RuntimeError(
+            "No valid model pipeline was trained successfully. Please inspect the logged training errors."
         )
-        model_metrics["binary"][model_name] = binary_metrics
-
-        if best_binary_metrics is None or binary_metrics["f1_score"] > best_binary_metrics["f1_score"]:
-            best_binary_pipeline = binary_pipeline
-            best_binary_metrics = binary_metrics
-
-        print(f"[DarkSec] -> Multi-class model: {model_name}")
-        multiclass_pipeline, multiclass_metrics = train_pipeline(
-            X_train_m, y_train_m, X_test_m, y_test_m, model_name, estimator, "multiclass"
-        )
-        model_metrics["multiclass"][model_name] = multiclass_metrics
-
-        if (
-            best_multiclass_metrics is None
-            or multiclass_metrics["f1_score"] > best_multiclass_metrics["f1_score"]
-        ):
-            best_multiclass_pipeline = multiclass_pipeline
-            best_multiclass_metrics = multiclass_metrics
 
     classifier_bundle = {
         "project_name": "DarkSec Threat Intelligence Platform",

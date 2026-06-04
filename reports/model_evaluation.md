@@ -1,49 +1,60 @@
 # DarkSec Model Evaluation
 
 ## Binary Classification
-- Model: `RandomForest`
-- Accuracy: 1.0000
-- Precision: 1.0000
-- Recall: 1.0000
-- F1-score: 1.0000
+- Model: `XGBoost`
+- Accuracy: 0.9983
+- Precision: 0.9983
+- Recall: 0.9983
+- F1-score: 0.9983
 
 ### Classification Report
 ```text
               precision    recall  f1-score   support
 
-      Attack       1.00      1.00      1.00         3
-      Normal       1.00      1.00      1.00         1
+      Attack       0.99      1.00      1.00      2916
+      Normal       1.00      1.00      1.00     12734
 
-    accuracy                           1.00         4
-   macro avg       1.00      1.00      1.00         4
-weighted avg       1.00      1.00      1.00         4
+    accuracy                           1.00     15650
+   macro avg       1.00      1.00      1.00     15650
+weighted avg       1.00      1.00      1.00     15650
 ```
 
 ### Confusion Matrix
 ```text
-[[3, 0], [0, 1]]
+[[2904, 12], [15, 12719]]
 ```
 
 ## Multi-Class Classification
 - Model: `RandomForest`
-- Accuracy: 1.0000
-- Precision: 1.0000
-- Recall: 1.0000
-- F1-score: 1.0000
+- Accuracy: 0.9971
+- Precision: 0.9969
+- Recall: 0.9971
+- F1-score: 0.9970
 
 ### Classification Report
 ```text
               precision    recall  f1-score   support
 
-           0       1.00      1.00      1.00         2
-           5       1.00      1.00      1.00         2
+           0       1.00      1.00      1.00     12822
+           1       0.76      0.81      0.79        16
+           2       1.00      1.00      1.00      1119
+           3       1.00      0.87      0.93        23
+           4       1.00      0.98      0.99       523
+           5       1.00      1.00      1.00        11
+           6       1.00      1.00      1.00        10
+           7       1.00      0.97      0.98        32
+           8       0.99      1.00      1.00      1041
+           9       1.00      0.96      0.98        26
+          10       0.60      0.60      0.60        15
+          11       0.00      0.00      0.00         1
+          12       0.38      0.27      0.32        11
 
-    accuracy                           1.00         4
-   macro avg       1.00      1.00      1.00         4
-weighted avg       1.00      1.00      1.00         4
+    accuracy                           1.00     15650
+   macro avg       0.83      0.81      0.81     15650
+weighted avg       1.00      1.00      1.00     15650
 ```
 
 ### Confusion Matrix
 ```text
-[[2, 0], [0, 2]]
+[[12809, 4, 0, 0, 1, 0, 0, 0, 8, 0, 0, 0, 0], [3, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 1119, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [3, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0], [9, 0, 0, 0, 514, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 10, 0, 0, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 31, 0, 0, 0, 0, 0], [0, 0, 0, 0, 1, 0, 0, 0, 1040, 0, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0, 0, 25, 0, 0, 0], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 5], [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 3]]
 ```
