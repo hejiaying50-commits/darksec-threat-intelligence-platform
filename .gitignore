@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+.idea/
+.vscode/
+models/*.pkl
+data/raw/
+data/cleaned/
+*.log
+.streamlit/
+.ipynb_checkpoints/
+.DS_Store
