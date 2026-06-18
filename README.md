@@ -1,116 +1,110 @@
-# DarkSec Threat Intelligence Platform
+# CICIDS2017-Traffic-Analysis
 
-DarkSec Threat Intelligence Platform is a portfolio-ready cybersecurity analytics project built on the CICIDS2017 / Network Intrusion Dataset. It combines data cleaning, exploratory threat analysis, machine learning-based attack classification, and a Streamlit-powered SOC dashboard for security posture monitoring and interactive prediction.
+## 项目名称
 
-## Project Introduction
+网络流量异常检测与安全分析平台
 
-This project is designed to simulate a practical threat intelligence workflow for network security analysis. It helps users explore attack traffic patterns, identify high-risk categories, compare benign versus malicious flows, and operationalize model predictions in a dashboard environment.
+## 项目背景
 
-## Project Architecture
+本项目基于 CICIDS2017 公开入侵检测数据集，围绕网络流量分析、攻击类型识别、协议与端口画像、异常检测和 SOC 安全运营可视化展开，构建一个面向安全运营场景的流量分析平台。
+
+项目重点不只是“训练一个分类模型”，而是模拟 SOC 分析视角，体现从数据清洗、攻击画像、SQL 分析、异常检测到 BI / Streamlit 看板展示的完整流程。
+
+## 数据来源
+
+说明：CICIDS2017 由 Canadian Institute for Cybersecurity 发布，包含正常流量和多种攻击流量，并提供用于机器学习的 CSV 流量特征文件。
+
+推荐数据源：
+
+1. 官方 CICIDS2017：[https://www.unb.ca/cic/datasets/ids-2017.html](https://www.unb.ca/cic/datasets/ids-2017.html)
+2. Kaggle 镜像：搜索关键词 `CICIDS2017 MachineLearningCSV Kaggle`
+
+需要下载：
+
+- `MachineLearningCSV.zip`
+- 或包含多个 CSV 的 CICIDS2017 数据包
+
+下载后放到：
+
+`D:\DataAnalysis\CICIDS2017-Traffic-Analysis\data\raw`
+
+如果是 zip，请手动解压到 `data/raw`。
+
+
+## 项目结构
 
 ```text
-DarkSec-Threat-Intel/
-|-- data/
-|   |-- raw/
-|   `-- cleaned/
-|-- notebooks/
-|   `-- 01_eda_analysis.ipynb
-|-- src/
-|   |-- data_cleaning.py
-|   |-- feature_engineering.py
-|   |-- train_model.py
-|   `-- evaluate_model.py
-|-- dashboard/
-|   `-- streamlit_app.py
-|-- models/
-|-- reports/
-|-- README.md
-`-- requirements.txt
+D:\DataAnalysis\CICIDS2017-Traffic-Analysis
+├── data
+│   ├── raw
+│   ├── processed
+│   └── sample
+├── notebook
+│   ├── 01_data_clean.ipynb
+│   ├── 02_traffic_analysis.ipynb
+│   └── 03_anomaly_detection.ipynb
+├── sql
+│   └── traffic_analysis.sql
+├── dashboard
+│   └── powerbi_dashboard_guide.md
+├── streamlit
+│   └── app.py
+├── screenshots
+├── report
+│   └── project_summary.md
+├── src
+│   ├── data_clean.py
+│   ├── feature_engineering.py
+│   └── model_train.py
+├── README.md
+├── requirements.txt
+└── .gitignore
 ```
 
-## Tech Stack
+## 分析内容
 
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- XGBoost
-- Plotly
-- Streamlit
-- Joblib
-- Matplotlib
+1. 数据清洗与字段标准化
+2. 攻击类型分布分析
+3. 正常/攻击流量占比分析
+4. 协议分布分析
+5. TOP 攻击端口分析
+6. Isolation Forest 异常流量检测
+7. SOC 安全运营驾驶舱
 
-## Dataset Source
+## 核心成果
 
-- Kaggle: CICIDS2017 / Network Intrusion Dataset
-- Place the downloaded CSV files into `data/raw/`
+- 基于 CICIDS2017 数据集完成网络流量数据清洗与分析
+- 提取 80+ 网络流量特征字段
+- 构建正常/攻击流量识别标签
+- 完成攻击类型、协议分布、端口画像分析
+- 使用 Isolation Forest 实现异常流量检测
+- 使用 Power BI 和 Streamlit 搭建 SOC 风格安全分析看板
 
-The repository is prepared for CICIDS-style traffic labels such as `BENIGN`, `DDoS`, `PortScan`, `Bot`, `FTP-Patator`, and `SSH-Patator`.
+## 运行方式
 
-## Installation
+1. 下载 CICIDS2017 MachineLearningCSV 数据
+2. 解压到 `data/raw`
+3. 安装依赖：
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage
-
-1. Put one or more dataset CSV files into `data/raw/`
-2. Run data cleaning
-3. Train the model
-4. Launch the dashboard
-
-### Data Cleaning
+4. 数据清洗：
 
 ```bash
-python src/data_cleaning.py
+python src/data_clean.py
 ```
 
-Optional sampling mode:
+5. 启动 Notebook 分析：
 
 ```bash
-python src/data_cleaning.py --sample-size 50000
+jupyter notebook
 ```
 
-### Model Training
+6. 启动 Streamlit：
 
 ```bash
-python src/train_model.py
+streamlit run streamlit/app.py
 ```
 
-### Model Evaluation
-
-```bash
-python src/evaluate_model.py
-```
-
-## Streamlit Launch
-
-```bash
-streamlit run dashboard/streamlit_app.py
-```
-
-## Screenshot Location
-
-Recommended screenshot directory:
-
-- `docs/dashboard-home.png`
-- `docs/attack-distribution.png`
-- `docs/prediction-panel.png`
-
-After adding screenshots, reference them in this README for a stronger GitHub presentation.
-
-## Project Highlights
-
-- Automatically reads all CSV files from `data/raw/`
-- Cleans whitespace, duplicates, missing values, and infinite values
-- Detects label columns automatically
-- Supports both binary and multi-class classification
-- Uses RandomForest as a robust baseline and XGBoost when available
-- Saves reusable model artifacts with Joblib
-- Provides a SOC-style Streamlit dashboard with KPI cards, charts, and CSV upload prediction
-- Includes defensive error handling for schema mismatch during inference
-
-## Resume Project Description
-
-> Built a cybersecurity threat intelligence analytics platform based on the CICIDS2017 intrusion detection dataset using Python, Pandas, Scikit-learn, Plotly, and Streamlit. Implemented automated data cleaning, threat trend analysis, binary and multi-class attack classification, and a SOC-style interactive dashboard for network attack monitoring and CSV-based prediction.
